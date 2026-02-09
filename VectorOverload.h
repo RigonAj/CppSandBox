@@ -87,14 +87,27 @@ inline bool operator!=(const Vector2 &v1, const Vector2 &v2){
 
 
 //-------FONCTION UTILE-------
-inline float Norm(Vector2 v) {
-    return sqrtf(v.x * v.x + v.y * v.y);
+
+
+inline float Dot(const Vector2 &v1 ,const Vector2 &v2 ) {
+    return v1.x * v2.x + v1.y * v2.y;
 }
 
-inline Vector2 Normalize(Vector2 v) {
+inline float Cross(const Vector2 &v1 ,const Vector2 &v2) {
+    return v1.x * v2.y - v1.y * v2.x;
+}
+
+inline float Norm(const Vector2 &v) {
+    return sqrtf(Dot(v,v));
+}
+
+inline Vector2 Normalize(const Vector2 &v) {
     float norm = Norm(v);
     if (norm > 0) return v / norm;
     return { 0, 0 };
 }
+
+
+
 
 #endif
