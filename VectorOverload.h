@@ -1,7 +1,7 @@
  #ifndef VECTOROVERLOAD_H
  #define  VECTOROVERLOAD_H
  #include "raylib.h"
-
+#include <cmath>
 
 //------ADDITION--------
 inline Vector2 operator+(const Vector2 &v1 , const Vector2 &v2)
@@ -75,6 +75,8 @@ inline Vector2 operator/=(Vector2 &v1, const float coef){
     v1 = v1 / coef;
     return v1; }
 
+inline Vector2 operator-(const Vector2& v) { return {-v.x, -v.y}; }
+
 //------COMPARAISON-------
 
 inline bool operator==(const Vector2 &v1, const Vector2 &v2){
@@ -82,5 +84,17 @@ inline bool operator==(const Vector2 &v1, const Vector2 &v2){
 
 inline bool operator!=(const Vector2 &v1, const Vector2 &v2){
     return v1.x != v2.x || v1.y != v2.y; }
+
+
+//-------FONCTION UTILE-------
+inline float Norm(Vector2 v) {
+    return sqrtf(v.x * v.x + v.y * v.y);
+}
+
+inline Vector2 Normalize(Vector2 v) {
+    float norm = Norm(v);
+    if (norm > 0) return v / norm;
+    return { 0, 0 };
+}
 
 #endif

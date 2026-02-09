@@ -1,6 +1,8 @@
 #include "map.h"
 #include <cmath>
+#include <complex>
 #include <raylib.h>
+
 #define RAD(x) ((x) * 3.14159265358979323846 / 180.0)
 Map::Map(Vector2 screen): target(LoadRenderTexture(screen.x, screen.y)),offset({screen.x/2,screen.y/2})
 {
