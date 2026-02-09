@@ -1,0 +1,3 @@
+compil exemple:
+
+g++  Lidar.cpp inputbox.cpp TextBoxes.cpp map.cpp -lraylib -lGL -lm -lpthread -ldl -lrt -lX11 -o Lidar && ./Lidar 
