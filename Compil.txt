@@ -1,3 +1,7 @@
 compil exemple:
 
-g++  Lidar.cpp inputbox.cpp TextBoxes.cpp map.cpp -lraylib -lGL -lm -lpthread -ldl -lrt -lX11 -o Lidar && ./Lidar 
+g++  Lidar.cpp inputbox.cpp TextBoxes.cpp map.cpp -lraylib -lGL -lm -lpthread -ldl -lrt -lX11 -o Lidar && ./Lidar
+
+et compil static:
+
+g++ Lidar.cpp inputbox.cpp TextBoxes.cpp map.cpp /usr/local/lib/libraylib.a -lGL -lm -lpthread -ldl -lrt -lX11 -o Lidar_Portable
