@@ -111,6 +111,16 @@ inline float Distance(const Vector2 &v1, const Vector2 &v2) {
     return Norm(v1 - v2);
 }
 
+inline float Angle(const Vector2 &v1, const Vector2 &v2){
+
+    float angle = atan2f(v2.y, v2.x) - atan2f(v1.y, v1.x);
+
+    if (angle > PI) angle -= 2.0f * PI;
+    if (angle < -PI) angle += 2.0f * PI;
+
+    return angle;
+}
+
 
 
 
