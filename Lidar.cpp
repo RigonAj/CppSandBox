@@ -46,13 +46,14 @@ int main() {
 
 
         if(IsKeyPressed(KEY_LEFT_CONTROL)) map.reset();
+        if(IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) map.SetScale(map.GetScale() * 1.1);
+        if(IsMouseButtonPressed(MOUSE_RIGHT_BUTTON)) map.SetScale(map.GetScale() * 0.9);
+        map.angle +=12*GetMouseWheelMove();
         BeginDrawing();
             ClearBackground(RAYWHITE);
             map.Draw();
             MouseCoord.TextDraw();
             text.TextDraw();
-
-
         EndDrawing();
 
         text.MovePosPressed();
