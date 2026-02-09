@@ -107,6 +107,10 @@ inline Vector2 Normalize(const Vector2 &v) {
     return { 0, 0 };
 }
 
+inline float Distance(const Vector2 &v1, const Vector2 &v2) {
+    return Norm(v1 - v2);
+}
+
 
 
 
