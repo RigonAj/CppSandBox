@@ -2,6 +2,7 @@
  #define  VECTOROVERLOAD_H
  #include "raylib.h"
 #include <cmath>
+#include <vector>
 
 //------ADDITION--------
 inline Vector2 operator+(const Vector2 &v1 , const Vector2 &v2)
@@ -80,10 +81,12 @@ inline Vector2 operator-(const Vector2& v) { return {-v.x, -v.y}; }
 //------COMPARAISON-------
 
 inline bool operator==(const Vector2 &v1, const Vector2 &v2){
-    return v1.x == v2.x && v1.y == v2.y; }
+    const float precision = 0.0001f;
+    return (v1.x-v2.x) < precision  && (v1.y-v2.y) < precision ; }
 
 inline bool operator!=(const Vector2 &v1, const Vector2 &v2){
-    return v1.x != v2.x || v1.y != v2.y; }
+    const float precision = 0.0001f;
+    return (v1.x-v2.x) > precision  || (v1.y-v2.y) > precision ; }
 
 
 //-------FONCTION UTILE-------
@@ -112,16 +115,35 @@ inline float Distance(const Vector2 &v1, const Vector2 &v2) {
 }
 
 inline float Angle(const Vector2 &v1, const Vector2 &v2){
-
-    float angle = atan2f(v2.y, v2.x) - atan2f(v1.y, v1.x);
-
-    if (angle > PI) angle -= 2.0f * PI;
-    if (angle < -PI) angle += 2.0f * PI;
-
-    return angle;
+    return atan2f(Cross(v1, v2), Dot(v1, v2));
 }
 
 
+inline void Rotation(Vector2 &v1, const float angle,const Vector2 &Reference = {0,0}){
+    const float c= cosf(angle);
+    const float s= sinf(angle);
+
+    float dx = v1.x - Reference.x ;
+    float dy = v1.y - Reference.y;
+
+    v1.x = (dx * c - dy * s) + Reference.x;
+    v1.y = (dx * s + dy * c) + Reference.y;
+}
+
+
+inline void RotatePoints(std::vector<Vector2> &points, const float angle,const Vector2 &Reference = {0,0}){
+    const float c= cosf(angle);
+    const float s= sinf(angle);
+    for(auto &point : points){
+
+        float dx = point.x - Reference.x ;
+        float dy = point.y - Reference.y;
+
+        point.x = dx * c - dy * s + Reference.x;
+        point.y = dx * s + dy * c + Reference.y;
+
+    }
+}
 
 
 #endif
