@@ -13,6 +13,7 @@ struct euler_t {
     float pitch=0;
     float roll=0;
 };
+
 int main() {
 
     Vector2i screen = {1920,1080};

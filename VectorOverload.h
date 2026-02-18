@@ -3,6 +3,7 @@
  #include "raylib.h"
 #include <cmath>
 #include <vector>
+#include <array>
 
 //------ADDITION--------
 inline Vector2 operator+(const Vector2 &v1 , const Vector2 &v2)
@@ -110,16 +111,16 @@ inline Vector2 Normalize(const Vector2 &v) {
     return { 0, 0 };
 }
 
-inline float Distance(const Vector2 &v1, const Vector2 &v2) {
-    return Norm(v1 - v2);
+inline float Distance(const Vector2 &p1, const Vector2 &p2) {
+    return Norm(p1 - p2);
 }
 
 inline float Angle(const Vector2 &v1, const Vector2 &v2){
     return atan2f(Cross(v1, v2), Dot(v1, v2));
 }
 
-
-inline void Rotation(Vector2 &v1, const float angle,const Vector2 &Reference = {0,0}){
+/* Reference est le centre de rotation, par défault {0,0} */
+inline Vector2& Rotation(Vector2 &v1, const float angle,const Vector2 &Reference = {0,0}){
     const float c= cosf(angle);
     const float s= sinf(angle);
 
@@ -128,12 +129,14 @@ inline void Rotation(Vector2 &v1, const float angle,const Vector2 &Reference = {
 
     v1.x = (dx * c - dy * s) + Reference.x;
     v1.y = (dx * s + dy * c) + Reference.y;
+    return v1;
 }
 
-
+/* Reference est le centre de rotation, par défault {0,0} */
 inline void RotatePoints(std::vector<Vector2> &points, const float angle,const Vector2 &Reference = {0,0}){
     const float c= cosf(angle);
     const float s= sinf(angle);
+
     for(auto &point : points){
 
         float dx = point.x - Reference.x ;
@@ -142,6 +145,22 @@ inline void RotatePoints(std::vector<Vector2> &points, const float angle,const V
         point.x = dx * c - dy * s + Reference.x;
         point.y = dx * s + dy * c + Reference.y;
 
+
+    }
+}
+
+template <size_t N>// permet de laisser compilateur en fonction du code la valeur de N
+inline void RotatePoints(std::array<Vector2,N> &points, const float angle,const Vector2 &Reference = {0,0}){
+    const float c= cosf(angle);
+    const float s= sinf(angle);
+
+    for(auto &point : points){
+
+        float dx = point.x - Reference.x ;
+        float dy = point.y - Reference.y;
+
+        point.x = dx * c - dy * s + Reference.x;
+        point.y = dx * s + dy * c + Reference.y;
     }
 }
 

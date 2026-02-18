@@ -14,17 +14,24 @@ class Map{
         void AddPointPolaire(float,float);
 
         void Draw()const;
+        void Update();
+        void moveCamera();
         void SetTexture(Vector2,Vector2);
         void reset();
-        inline void SetScale(float scal){scale = scal;}
-        inline float GetScale()const {return scale;}
 
-        float angle = 0;
+
+
 
     protected:
         array<Vector2,SIZE> points{Vector2{0,0}};
         int index = 0;
         RenderTexture2D target;
         Vector2 offset;
-        float scale=1;
+
+        Camera2D camera = { 0 };
+        bool move_ = 0;
+
+
+        Vector2 pose = {0,0};
+        float yaw = 0;
 };
