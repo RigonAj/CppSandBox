@@ -16,7 +16,7 @@ int main() {
 
     Vector2 screen = {1920,1080};
     InitWindow(screen.x, screen.y, "Succès ! raylib fonctionne");
-    //SetTargetFPS(120);
+    SetTargetFPS(120);
 
 
     Font mono = LoadFontEx("Font/cascadia-mono/CascadiaMono-SemiBold.otf", 64, 0, 250);
