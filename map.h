@@ -15,7 +15,8 @@ class Map{
 
         void Draw()const;
         void Update();
-        void moveCamera();
+        bool EventUpdate();
+        bool moveCamera();
         void SetTexture(Vector2,Vector2);
         void reset();
 
@@ -31,7 +32,4 @@ class Map{
         Camera2D camera = { 0 };
         bool move_ = 0;
 
-
-        Vector2 pose = {0,0};
-        float yaw = 0;
 };

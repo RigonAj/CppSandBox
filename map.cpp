@@ -19,7 +19,7 @@ Map::Map(Vector2 screen): target(LoadRenderTexture(screen.x *  4 , screen.y * 4 
 
 
 void Map::AddPoint(Vector2 point){
-    Vector2 p1 = Rotation(point,yaw) + offset + pose;
+    Vector2 p1 = point + offset ;
     Vector2 p2 = points[index % SIZE];
     SetTexture(p1,p2);
     points[index % SIZE] = p1;
@@ -44,15 +44,19 @@ void Map::Draw() const {
     float height = (float)target.texture.height;
     Vector2 origin = Vector2{width, height} / 2;
     Rectangle dest = { offset.x, offset.y, width, height };
-
+    BeginMode2D(camera);
     DrawTexturePro(target.texture, source, dest, origin, 0 , WHITE);
+    EndMode2D();
 }
 
 void Map::Update(){
-    moveCamera();
 }
 
-void Map::moveCamera(){
+bool Map::EventUpdate(){
+    return moveCamera();
+}
+
+bool Map::moveCamera(){
 
     float wheel = GetMouseWheelMove();
     if (wheel != 0) {
@@ -61,21 +65,19 @@ void Map::moveCamera(){
         camera.target = mouseWorldPos;
         const float zoomIncrement = 0.1f;
         camera.zoom += (wheel * zoomIncrement);
+        return 1;
     }
-
 
     if (IsMouseButtonDown(MOUSE_LEFT_BUTTON)){
         camera.target -= GetMouseDelta()/camera.zoom;
+        return 1;
     }
-
-
+    return 0;
 }
 void Map::SetTexture(Vector2 point1,Vector2 point2){
     BeginTextureMode(target);
-    BeginMode2D(camera);
-        if (point2 == Vector2{0,0} ) DrawRectangleV(point2,{40,40} ,WHITE);
-        DrawRectangleV(point1,{40,40} ,RED);
-    EndMode2D();
+        if (point2 == Vector2{0,0} ) DrawRectangleV(point2,{4,4} ,WHITE);
+        DrawRectangleV(point1,{4,4} ,RED);
     EndTextureMode();
 }
 

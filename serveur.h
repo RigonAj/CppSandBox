@@ -1,8 +1,9 @@
-#include <bits/stdc++.h>
+#pragma once
+
 #include <cstdint>
+#include <cstring>
 #include <iostream>
 #include <unistd.h>
-#include <string>
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <arpa/inet.h>
@@ -16,7 +17,7 @@ using namespace std;
 
 class Serveur{
     public:
-
+    virtual ~Serveur(); // le virtual sert quand une class hérite de Serveur , sinon il pourra pas le detruire
     int receive();
     void init(const char *,uint16_t);
     void send(uint8_t*, size_t);
@@ -30,6 +31,9 @@ class Serveur{
         uint8_t buffer[1024];
 };
 
+Serveur::~Serveur(){
+    close(sockfd);
+}
 
 void Serveur::init(const char *ip,uint16_t port){
 
