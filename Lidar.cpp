@@ -32,8 +32,8 @@ int main() {
 
 
         robot.Update();
-        if(buton.EventUpdate());
-        else if(robot.EventUpdate());
+
+        robot.EventUpdate();
 
 
         if(IsKeyPressed(KEY_LEFT_CONTROL)) robot.reset();

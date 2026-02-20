@@ -83,11 +83,11 @@ inline Vector2 operator-(const Vector2& v) { return {-v.x, -v.y}; }
 
 inline bool operator==(const Vector2 &v1, const Vector2 &v2){
     const float precision = 0.0001f;
-    return (v1.x-v2.x) < precision  && (v1.y-v2.y) < precision ; }
+    return fabs(v1.x-v2.x) < precision  && fabs(v1.y-v2.y) < precision ; }
 
 inline bool operator!=(const Vector2 &v1, const Vector2 &v2){
     const float precision = 0.0001f;
-    return (v1.x-v2.x) > precision  || (v1.y-v2.y) > precision ; }
+    return fabs(v1.x-v2.x) > precision  || fabs(v1.y-v2.y) > precision ; }
 
 
 //-------FONCTION UTILE-------
@@ -119,7 +119,8 @@ inline float Angle(const Vector2 &v1, const Vector2 &v2){
     return atan2f(Cross(v1, v2), Dot(v1, v2));
 }
 
-/* Reference est le centre de rotation, par défault {0,0} */
+/*Change les valeur du vecteur et retourne un vecteur
+ Reference est le centre de rotation, par défault {0,0} */
 inline Vector2& Rotation(Vector2 &v1, const float angle,const Vector2 &Reference = {0,0}){
     const float c= cosf(angle);
     const float s= sinf(angle);
@@ -131,8 +132,19 @@ inline Vector2& Rotation(Vector2 &v1, const float angle,const Vector2 &Reference
     v1.y = (dx * s + dy * c) + Reference.y;
     return v1;
 }
+/* Prend un vecteur polaire radian,Retourne un vecteur en cartesien */
+inline Vector2 RotationPolaire(const Vector2 &v1, const float angle,const Vector2 &Reference = {0,0}){
+    Vector2 v1_cartesien = v1.x * Vector2{cosf(v1.y+angle),sinf(v1.y+angle)};
+    return v1_cartesien + Reference;
+}
+/* Prend un vecteur polaire degré,Retourne un vecteur en cartesien */
+inline Vector2 RotationPolaireDeg(const Vector2 &v1, const float angle,const Vector2 &Reference = {0,0}){
+    Vector2 v1_cartesien = v1.x * Vector2{cosf((v1.y+angle)*DEG2RAD),sinf((v1.y +angle)*DEG2RAD)};
+    return v1_cartesien + Reference;
+}
 
-/* Reference est le centre de rotation, par défault {0,0} */
+/*
+Reference est le centre de rotation, par défault {0,0} */
 inline void RotatePoints(std::vector<Vector2> &points, const float angle,const Vector2 &Reference = {0,0}){
     const float c= cosf(angle);
     const float s= sinf(angle);
@@ -144,7 +156,6 @@ inline void RotatePoints(std::vector<Vector2> &points, const float angle,const V
 
         point.x = dx * c - dy * s + Reference.x;
         point.y = dx * s + dy * c + Reference.y;
-
 
     }
 }
