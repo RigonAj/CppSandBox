@@ -79,17 +79,13 @@ Robot::Robot(Vector2 screen, const char* ip, uint16_t port) : Map(screen) {
 
 
     workerThreadLidar = std::thread(&Robot::LidarRecup, this);
+    workerThreadLidar.detach();
     workerThreadImu   = std::thread(&Robot::ImuRecup, this);
+    workerThreadImu.detach();
 }
 
 Robot::~Robot() {
     Run = false;
-    if (workerThreadLidar.joinable()) {
-        workerThreadLidar.detach();
-    }
-    if (workerThreadImu.joinable()) {
-        workerThreadImu.detach();
-    }
 }
 
 void Robot::Draw(){
@@ -131,26 +127,23 @@ bool Robot::EventUpdate(){
 
 void Robot::LidarRecup() {
     int n = 0;
-    while (Run.load()) {
-        if( (n = LidarServ.receive()) > 0){
-            for(int i = 0 ; i < n / sizeof(Point) ; i++){
-                Pointwrite->emplace_back(Vector2{point[i].distance,point[i].angle});
-            }
-            {
-                std::lock_guard<std::mutex> lock(LidarMux);
-                std::swap(Pointwrite, Pointtmp);
-            }
-            Pointwrite->clear();
-        }
+    while (Run.load() && (n = ImuServ.receive()) > 0) {
 
-    std::this_thread::sleep_for(std::chrono::milliseconds(1));
+        for(int i = 0 ; i < n / sizeof(Point) ; i++){
+            Pointwrite->emplace_back(Vector2{point[i].distance,point[i].angle});
+        }
+        {
+            std::lock_guard<std::mutex> lock(LidarMux);
+            std::swap(Pointwrite, Pointtmp);
+        }
+        Pointwrite->clear();
+
     }
 }
 
 void Robot::ImuRecup() {
     int n = 0;
-    while (Run.load()) {
-        if( (n = ImuServ.receive()) > 0){
+    while (Run.load() && (n = ImuServ.receive()) > 0) {
             {
                 std::lock_guard<std::mutex> lock(ImuMux);
                 ImuWrite->emplace_back(*imu) ;
@@ -166,7 +159,6 @@ void Robot::ImuRecup() {
             std::lock_guard<std::mutex> lock(PoseMux);
             pose_ += Rotation(dir, imu -> yaw *  DEG2RAD) * norm;
             }
-        }
-    std::this_thread::sleep_for(std::chrono::milliseconds(1));
+
     }
 }
