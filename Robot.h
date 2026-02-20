@@ -127,7 +127,7 @@ bool Robot::EventUpdate(){
 
 void Robot::LidarRecup() {
     int n = 0;
-    while (Run.load() && (n = ImuServ.receive()) > 0) {
+    while (Run.load() && (n = LidarServ.receive()) > 0) {
 
         for(int i = 0 ; i < n / sizeof(Point) ; i++){
             Pointwrite->emplace_back(Vector2{point[i].distance,point[i].angle});
