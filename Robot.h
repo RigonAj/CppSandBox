@@ -85,10 +85,10 @@ Robot::Robot(Vector2 screen, const char* ip, uint16_t port) : Map(screen) {
 Robot::~Robot() {
     Run = false;
     if (workerThreadLidar.joinable()) {
-        workerThreadLidar.join();
+        workerThreadLidar.detach();
     }
     if (workerThreadImu.joinable()) {
-        workerThreadImu.join();
+        workerThreadImu.detach();
     }
 }
 

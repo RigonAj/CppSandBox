@@ -18,7 +18,7 @@ using namespace std;
 class Serveur{
     public:
     virtual ~Serveur(); // le virtual sert quand une class hérite de Serveur , sinon il pourra pas le detruire
-    int receive();
+    int receive(bool bloquant = true);
     void init(const char *,uint16_t);
     void send(uint8_t*, size_t);
     inline const uint8_t* GetData()const{return buffer;}
@@ -58,10 +58,10 @@ void Serveur::init(const char *ip,uint16_t port){
     }
 }
 
-int Serveur::receive() {
+int Serveur::receive(bool bloquant) {
     socklen_t len = sizeof(cliaddr);
-
-    int n = recvfrom(sockfd, buffer, MAXLINE-1 , MSG_DONTWAIT, (struct sockaddr *)&cliaddr, &len);
+    int flag = bloquant ? 0 : MSG_DONTWAIT;
+    int n = recvfrom(sockfd, buffer, MAXLINE-1 , flag , (struct sockaddr *)&cliaddr, &len);
 
     if (n > 0) {
         client_connected = true;
