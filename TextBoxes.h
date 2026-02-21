@@ -4,18 +4,20 @@
 #include <raylib.h>
 #include <vector>
 #include <string>
+#include "Gui.h"
 
 
 using namespace std;
 
-class TextBox{
+class TextBox:public Gui{
   public:
-    TextBox(string s,Vector2 pos,int FontSize,int spacing,Font font = GetFontDefault());
-    void TextDraw()const;
+    TextBox(string s, Vector2 pos, int FontSize, int spacing, Font font);
+    TextBox(string s, Vector2 pos, int FontSize, int spacing);
+    void Draw();
 
     void AppendText(const string &s);
     void ChangeText(const string &s,int line = -1);
-
+    bool EventCheck(){return false;}
     void MovePos();//Just Drag the text, MouseDown
     void MovePosPressed();//Click once to get hold of the text then again to release it
 

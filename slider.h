@@ -1,13 +1,14 @@
 #pragma once
 #include "raylib.h"
+#include "Gui.h"
 #include "VectorOverload.h"
 
-class slider{
+class slider:public Gui{
     public:
         slider(Vector2 pose , Vector2 size, Vector2 range = {0,1});
+        bool EventCheck();
         void Draw();
-        void Update();
-        void Slide();
+        bool Slide();
         inline float GetValue() const{return value_;}
 
     private:

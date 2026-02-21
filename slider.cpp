@@ -1,6 +1,6 @@
 #include "slider.h"
 #include <algorithm>
-#include <raylib.h>
+
 
 slider::slider(Vector2 pose , Vector2 size, Vector2 range):
 pose_(pose), size_(size),range_(range),value_(range.x){
@@ -13,17 +13,18 @@ pose_(pose), size_(size),range_(range),value_(range.x){
         SlidePose_ = {pose_.x,pose_.y};
     }
     recSlider_ = {pose_.x,pose_.y, size_.x,size_.y};
+    element[page].emplace_back(this);
 }
 void slider::Draw(){
     DrawRectangleV(pose_, size_, GRAY);
     DrawRectangleV(SlidePose_, SlideSize_, BLUE);
 }
 
-void slider::Update(){
-    Slide();
+bool slider::EventCheck(){
+    return Slide();
 }
 
-void slider::Slide() {
+bool slider::Slide() {
 
     if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && CheckCollisionPointRec(GetMousePosition(), recSlider_)) {
         move_ = true;
@@ -45,4 +46,5 @@ void slider::Slide() {
         }
         value_ = range_.x + (percent * (range_.y - range_.x));
     }
+    return move_;
 }

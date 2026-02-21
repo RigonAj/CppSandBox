@@ -37,6 +37,7 @@ class Robot:public Map{
         void UpdatePoseSurMap();
         float yaw_ = 0;
         float yaw_ref = 0;//Réferentiel
+        std::atomic<float> coef{1.0f};
 
     protected:
         Vector2 pose_{0,0};
@@ -58,7 +59,7 @@ class Robot:public Map{
         std::mutex ImuMux;
         std::mutex PoseMux;
         std::atomic<bool> Run{true};
-        std::atomic<float> coef{1.0f};
+
 
         std::thread workerThreadLidar;
         std::thread workerThreadImu;

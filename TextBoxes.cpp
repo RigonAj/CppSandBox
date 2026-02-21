@@ -7,10 +7,21 @@ pose_(pos),font_size_(FontSize),font_(font),spacing_(spacing){
     text_.emplace_back(s);
     size_ = MeasureTextEx(font_,s.c_str(),font_size_,spacing_);
     rec_ = {pose_.x,pose_.y,size_.x,size_.y*nLines_};
+    element[page].emplace_back(this);
 }
 
-
-void TextBox::TextDraw()const{
+TextBox::TextBox(string s, Vector2 pos, int FontSize, int spacing)
+    : pose_(pos), font_size_(FontSize), spacing_(spacing), nLines_(1) {
+    font_ = GetFontDefault();
+    text_.emplace_back(s);
+    if (!s.empty())
+        size_ = MeasureTextEx(font_, s.c_str(), font_size_, spacing_);
+    else
+        size_ = {(float)font_size_, (float)font_size_}; // valeur safe par défaut
+    rec_ = {pose_.x, pose_.y, size_.x, size_.y * (float)nLines_};
+    element[page].emplace_back(this);
+}
+void TextBox::Draw(){
     for(int i = 0 ; i < nLines_ ; i++){
     DrawTextEx(font_,text_[i].c_str(),{ pose_.x , pose_.y  + size_.y * i}, (float)font_size_,spacing_,BLACK) ;
     }
