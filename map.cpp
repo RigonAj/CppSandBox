@@ -1,8 +1,10 @@
 #include "map.h"
+#include <algorithm>
+#include <raylib.h>
 
 
 #define RAD(x) ((x) * 3.14159265358979323846 / 180.0)
-Map::Map(Vector2 screen): target(LoadRenderTexture(screen.x *  4 , screen.y * 4 )),offset(screen * 4 / 2.0f)
+Map::Map(Vector2 screen): target(LoadRenderTexture(screen.x *  4 , screen.y * 4 )),offset(screen * 4 / 2.0f),screen(screen)
 {
     BeginTextureMode(target);
     BeginMode2D(camera);
@@ -65,6 +67,7 @@ bool Map::moveCamera(){
         camera.target = mouseWorldPos;
         const float zoomIncrement = 0.1f;
         camera.zoom += (wheel * zoomIncrement);
+        camera.zoom = std::clamp(camera.zoom,0.1f,3.0f);
         return 1;
     }
 
@@ -76,13 +79,18 @@ bool Map::moveCamera(){
 }
 void Map::SetTexture(Vector2 point1,Vector2 point2){
     BeginTextureMode(target);
-        if (point2 == Vector2{0,0} ) DrawRectangleV(point2,{4,4} ,WHITE);
-        DrawRectangleV(point1,{4,4} ,RED);
+        if (point2 == Vector2{0,0} ) DrawCircleV(point2,2 ,WHITE);
+        DrawCircleV(point1,2 ,RED);
     EndTextureMode();
 }
 
 
 void Map::reset(){
+
+    camera.target = screen * 4 / 2;
+    camera.offset = screen / 2 ;
+    camera.rotation = 0.0f;
+    camera.zoom = 1.0f;
     BeginTextureMode(target);
     ClearBackground(WHITE);
     EndTextureMode();

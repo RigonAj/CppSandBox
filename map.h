@@ -28,7 +28,7 @@ class Map{
         int index = 0;
         RenderTexture2D target;
         Vector2 offset;
-
+        Vector2 screen;
         Camera2D camera = { 0 };
         bool move_ = 0;
 

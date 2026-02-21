@@ -26,8 +26,12 @@ int main() {
 
 
     while (!WindowShouldClose()) {
-
-        MouseCoord.ChangeText(TextFormat("X: %d, Y: %d",GetMouseX(),GetMouseY()));
+        Vector2 LastPoint = robot.GetLastPoint();
+        MouseCoord.ChangeText(TextFormat("X: %d, Y: %d",LastPoint.x,LastPoint.y),0);
+        MouseCoord.ChangeText(TextFormat("Lidar Time Period %.0f ms , %.0f hz",robot.TimeElapsedLidar(),1/(robot.TimeElapsedLidar()/1000+0.0001)),1);
+        MouseCoord.ChangeText(TextFormat("Odometry Time Period %.0f ms , %.0f hz ",robot.TimeElapsedImu(),1/(robot.TimeElapsedImu()/1000+0.0001)),2);
+        MouseCoord.ChangeText(TextFormat("Yaw : %.2f",robot.yaw_),3);
+        MouseCoord.ChangeText(TextFormat("X: %d, Y: %d",GetMouseX(),GetMouseY()),4);
 
 
 
