@@ -25,7 +25,7 @@ int main() {
     slider slide(Vector2{600,20},Vector2{1000,30},Vector2{0.1,10});
     slider slide2(Vector2{600,70},Vector2{1000,30},Vector2{0,0.1});
     TextBox text("",{10,55},30,10);
-    TextBox MouseCoord("",{10,10},20,3);
+    TextBox MouseCoord("",{10,10},20,3,mono);
     gui.AddPage();
     slider slide3(Vector2{600,120},Vector2{1000,30},Vector2{0,0.1});
     gui.SetPage(0);

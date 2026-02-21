@@ -12,8 +12,8 @@ bool Gui::EventCheck(){
 }
 
 void Gui::Draw(){
-    for(auto it = element[page].rbegin(); it != element[page].rend(); ++it){
-        if( (*it)->active ) (*it)->Draw();
+    for(auto it : element[page]){
+        if( (*it).active ) (*it).Draw();
     }
 }
 
