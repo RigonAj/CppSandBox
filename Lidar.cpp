@@ -18,7 +18,7 @@ int main() {
     Font mono = LoadFontEx("Font/cascadia-mono/CascadiaMono-SemiBold.otf", 64, 0, 250);
     TextBox text("",{10,55},30,10,mono);
     TextBox MouseCoord("",{10,10},20,3);
-
+    slider slide(Vector2{600,20},Vector2{1000,30},Vector2{0.4,1.5});
 
     Robot robot(screen , "0.0.0.0" , 8080);
 
@@ -34,7 +34,7 @@ int main() {
         MouseCoord.ChangeText(TextFormat("X: %d, Y: %d",GetMouseX(),GetMouseY()),4);
 
 
-
+        slide.Update();
         robot.Update();
 
         robot.EventUpdate();
@@ -48,6 +48,7 @@ int main() {
             MouseCoord.TextDraw();
             text.TextDraw();
             DrawFPS(10, 300);
+            slide.Draw();
 
         EndDrawing();
 
