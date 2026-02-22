@@ -1,5 +1,6 @@
 #include "raylib.h"
 #include <cmath>
+#include <cstdint>
 #include <string>
 #include "TextBoxes.h"
 #include "serveur.h"
@@ -21,14 +22,16 @@ int main() {
     Font mono = LoadFontEx("Font/cascadia-mono/CascadiaMono-SemiBold.otf", 64, 0, 250);
 
     Gui gui;
-    gui.AddPage();
+    gui.AddPage();//Menu
     slider slide(Vector2{600,20},Vector2{1000,30},Vector2{0.1,10});
     slider slide2(Vector2{600,70},Vector2{1000,30},Vector2{0,0.1});
-    TextBox text("",{10,55},30,10);
+    slider slide_pas(Vector2{600,120},Vector2{1000,30},Vector2{500,5000});
+     slider slide_acceleration(Vector2{600,170},Vector2{1000,30},Vector2{500,5000});
     TextBox MouseCoord("",{10,10},20,3,mono);
-    gui.AddPage();
-    slider slide3(Vector2{600,120},Vector2{1000,30},Vector2{0,0.1});
-    gui.SetPage(0);
+    gui.AddPage();//Game
+    slider slide3(Vector2{600,170},Vector2{1000,30},Vector2{0,0.1});
+
+    gui.SetPage(Menu);
 
     Robot robot(screen , "0.0.0.0" , 8080);
 
@@ -38,13 +41,13 @@ int main() {
     while (!WindowShouldClose()) {
         Vector2 LastPoint = robot.GetLastPoint();
         MouseCoord.ChangeText(TextFormat("X: %.0f, Y: %.0f", LastPoint.x, LastPoint.y), 0);
-
         MouseCoord.ChangeText(TextFormat("Lidar Time Period %.0f ms , %.0f hz",robot.TimeElapsedLidar(),1/(robot.TimeElapsedLidar()/1000+0.0001)),1);
         MouseCoord.ChangeText(TextFormat("Odometry Time Period %.0f ms , %.0f hz ",robot.TimeElapsedImu(),1/(robot.TimeElapsedImu()/1000+0.0001)),2);
         MouseCoord.ChangeText(TextFormat("Yaw : %.2f",robot.yaw_),3);
-        MouseCoord.ChangeText(TextFormat("Coef : %.2f",robot.coef.load()),4);
+        MouseCoord.ChangeText(TextFormat("Coef : %.5f",robot.coef.load()),4);
         MouseCoord.ChangeText(TextFormat("X: %d, Y: %d", GetMouseX(), GetMouseY()), 5);
-
+        MouseCoord.ChangeText(TextFormat("Commande pas : %.0f", slide_pas.GetValue()) , 6);
+        MouseCoord.ChangeText(TextFormat("Commande acceleration : %.0f", slide_acceleration.GetValue()) , 7);
 
         if(gui.EventCheck()){}
         else if(robot.EventUpdate()){};
@@ -57,6 +60,7 @@ int main() {
         if(IsKeyPressed(KEY_LEFT_CONTROL)) robot.reset();
         if(IsKeyPressed(KEY_Q)) gui.SetPage(Menu);
         if(IsKeyPressed(KEY_W)) gui.SetPage(Game);
+        if(IsKeyPressed(KEY_E)) robot.send_command(1, (int32_t)slide_pas.GetValue(), (int32_t)slide_pas.GetValue(),(int32_t)slide_acceleration.GetValue());
         BeginDrawing();
             ClearBackground(RAYWHITE);
             robot.Draw();
@@ -64,7 +68,6 @@ int main() {
             gui.Draw();
         EndDrawing();
 
-        text.MovePosPressed();
 
     }
 

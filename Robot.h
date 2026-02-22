@@ -2,6 +2,7 @@
 #include "VectorOverload.h"
 #include "map.h"
 #include "serveur.h"
+#include <cstdint>
 #include <raylib.h>
 #include <thread>
 #include <mutex>
@@ -20,6 +21,13 @@ struct ImuData {
     int pasdroite;
 };
 
+struct Command {
+    int32_t mode = 1;
+    int32_t pas_gauche = 0;
+    int32_t pas_droite = 0;
+    int32_t acceleration = -1;
+};
+
 class Robot:public Map{
 
     public:
@@ -31,6 +39,7 @@ class Robot:public Map{
         void Update();
         bool EventUpdate();
         void reset();
+        void send_command(int32_t mode, int32_t gauche, int32_t droite,int32_t acc);
         inline const Vector2 GetLastPoint(){return PointRead->back();}
         inline const double TimeElapsedLidar(){return elapsed_lidar.count();}
         inline const double TimeElapsedImu(){return elapsed_imu.count();}
@@ -52,6 +61,8 @@ class Robot:public Map{
 
         Serveur LidarServ;
         Serveur ImuServ;
+
+        Command WifiCommand ;
 
         float scale = 4.0f;
 
@@ -190,6 +201,11 @@ void Robot::reset(){
     yaw_ref = yaw_;
 }
 
+void Robot::send_command(int32_t mode, int32_t gauche, int32_t droite, int32_t acc){
+    WifiCommand = Command{mode,gauche,droite,acc};
+    LidarServ.send((uint8_t*)&WifiCommand, sizeof(WifiCommand));
+}
+
 void Robot::LidarRecup() {
     int n = 0;
     while (Run.load() && (n = LidarServ.receive()) > 0) {
@@ -219,7 +235,7 @@ void Robot::ImuRecup() {
             ancien_pasgauche   = (float)imu->pasgauche;
             ancien_pasdroite   = (float)imu->pasdroite;
             float norm = ( delta_droite + delta_gauche  ) * coef.load() /2;
-            Vector2 dir = {1,0};
+            Vector2 dir = {0,-1};
             {
             std::lock_guard<std::mutex> lock(PoseMux);
             pose_ += Rotation(dir, imu -> yaw *  DEG2RAD) * norm;
