@@ -1,0 +1,12 @@
+# Binaires compilés
+Lidar
+Lidar_Portable
+EspRead
+client
+main
+main2
+test
+*.o
+*.so
+*.a
+*.out
